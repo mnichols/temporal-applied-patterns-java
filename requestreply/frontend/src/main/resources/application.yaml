@@ -1,0 +1,17 @@
+server:
+  port: 3030
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: temporal-jumpstart
+    task-queues:
+      domain: "domain"
+      # see the frontend Application for the source of this value
+      replies: "replies-${APP_UUID}"
+  temporal:
+    namespace: default
+    connection:
+      target: 127.0.0.1:7233
+    workersAutoDiscovery:
+      packages: io.temporal.applied.patterns.requestreply.frontend

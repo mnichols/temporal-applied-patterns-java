@@ -1,0 +1,18 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: none
+  thymeleaf:
+      check-template-location: false
+  application:
+    name: temporal-applied-patterns
+  task-queues:
+    domain: "domain"
+  temporal:
+    namespace: default
+    connection:
+      target: 127.0.0.1:7233
+    workersAutoDiscovery:
+      packages:
+        - io.temporal.applied.patterns.cachingdataconverter.backend
+        - io.temporal.applied.patterns.cachingdataconverter.temporal

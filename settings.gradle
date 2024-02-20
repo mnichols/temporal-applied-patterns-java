@@ -1,0 +1,8 @@
+rootProject.name = 'temporal-applied-patterns'
+include 'requestreply'
+include 'requestreply:frontend'
+include 'requestreply:backend'
+include 'cachingdataconverter'
+include 'cachingdataconverter:backend'
+include 'cachingdataconverter:frontend'
+
