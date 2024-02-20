@@ -3,6 +3,7 @@ package io.temporal.applied.patterns.cachingdataconverter.temporal;
 import io.temporal.activity.LocalActivityOptions;
 import io.temporal.common.interceptors.WorkflowInboundCallsInterceptor;
 import io.temporal.common.interceptors.WorkflowInboundCallsInterceptorBase;
+import io.temporal.workflow.CancellationScope;
 import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowInfo;
 import org.slf4j.Logger;
@@ -23,14 +24,16 @@ public class CacheWorkflowInboundCallsInterceptor extends WorkflowInboundCallsIn
         } finally {
             WorkflowInfo info = Workflow.getInfo();
             try {
-                Workflow.newDetachedCancellationScope(() -> {
+                CancellationScope scope = Workflow.newDetachedCancellationScope(() -> {
                     CacheCleaner cleaner = Workflow.newLocalActivityStub(
                             CacheCleaner.class,
                             LocalActivityOptions.newBuilder().
                                     setStartToCloseTimeout(Duration.ofSeconds(2)).
                                     build());
-                    cleaner.markEvictable(new MarkEvictableRequest(info.getNamespace(),  info.getWorkflowType(),info.getWorkflowId()));
+                    cleaner.markEvictable(new MarkEvictableRequest(info.getNamespace(), info.getWorkflowType(), info.getWorkflowId()));
                 });
+                scope.run();
+
             } catch (Exception e) {
                 // gulp
                 logger.error("failed to clean cache", e);

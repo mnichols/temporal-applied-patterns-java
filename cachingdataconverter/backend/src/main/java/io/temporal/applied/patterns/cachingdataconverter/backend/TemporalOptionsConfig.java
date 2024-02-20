@@ -1,8 +1,9 @@
 package io.temporal.applied.patterns.cachingdataconverter.backend;
 
 import io.temporal.applied.patterns.cachingdataconverter.temporal.CacheWorkerInterceptor;
-import io.temporal.applied.patterns.cachingdataconverter.temporal.CachingPayloadConverter;
+import io.temporal.applied.patterns.cachingdataconverter.temporal.CachingPayloadCodec;
 import io.temporal.client.WorkflowClientOptions;
+import io.temporal.common.converter.CodecDataConverter;
 import io.temporal.common.converter.DefaultDataConverter;
 import io.temporal.serviceclient.WorkflowServiceStubsOptions;
 import io.temporal.spring.boot.TemporalOptionsCustomizer;
@@ -16,13 +17,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
 
 @Configuration
 public class TemporalOptionsConfig {
   Logger logger = LoggerFactory.getLogger(TemporalOptionsConfig.class);
 
   @Autowired
-  private CachingPayloadConverter payloadConverter;
+  private CachingPayloadCodec payloadCodec;
 
   @Bean
   public WorkerOptionsCustomizer customWorkerOptions() {
@@ -67,13 +69,10 @@ public class TemporalOptionsConfig {
       @Nonnull
       @Override
       public WorkflowClientOptions.Builder customize(
-          @Nonnull WorkflowClientOptions.Builder optionsBuilder) {
+              @Nonnull WorkflowClientOptions.Builder optionsBuilder) {
 
         // with CODEC
-//        optionsBuilder.setDataConverter(new CodecDataConverter(DefaultDataConverter.newDefaultInstance(), Collections.singletonList(payloadCodec)));
-
-        // with CONVERTER
-        optionsBuilder.setDataConverter(new DefaultDataConverter(payloadConverter));
+        optionsBuilder.setDataConverter(new CodecDataConverter(DefaultDataConverter.newDefaultInstance(), Collections.singletonList(payloadCodec)));
         // set options on optionsBuilder as needed
         // ...
         return optionsBuilder;

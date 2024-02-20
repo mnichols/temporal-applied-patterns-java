@@ -22,14 +22,10 @@ public class CacheConfig {
     }
 
     @Bean
-    public CachingPayloadConverter cachingPayloadConverter(RedisTemplate<String, CacheablePayload> template) {
-        return new RedisCachingPayloadConverterImpl(template, new JacksonJsonPayloadConverter());
+    public CachingPayloadCodec cachingPayloadConverter(RedisTemplate<String, CacheablePayload> template) {
+        return new RedisCachingPayloadCodecImpl(template, new JacksonJsonPayloadConverter());
     }
-//
-//    @Bean
-//    public CachingPayloadCodec cachingPayloadCodec(RedisTemplate<String, CacheablePayload> template, CachingPayloadConverter converter) {
-//        return new CachingPayloadCodecImpl(template, converter);
-//    }
+
     @Bean
     public CacheCleaner cacheCleaner(RedisTemplate<String, CacheablePayload> template) {
         return new RedisCacheCleanerImpl(template);

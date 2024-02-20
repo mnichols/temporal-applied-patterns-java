@@ -7,7 +7,7 @@ import io.temporal.applied.patterns.cachingdataconverter.backend.DomainWorkflow;
 import io.temporal.applied.patterns.cachingdataconverter.messaging.DomainReply;
 import io.temporal.applied.patterns.cachingdataconverter.messaging.ReplySpec;
 import io.temporal.applied.patterns.cachingdataconverter.messaging.StartDomainWorkflowRequest;
-import io.temporal.applied.patterns.cachingdataconverter.temporal.CachingPayloadConverter;
+import io.temporal.applied.patterns.cachingdataconverter.temporal.CachingPayloadCodec;
 import io.temporal.client.WorkflowClient;
 import io.temporal.client.WorkflowOptions;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +41,7 @@ public class APIController {
     public static final JsonFormat.Printer JSON_PRINTER = JsonFormat.printer();
 
     @Autowired
-    private CachingPayloadConverter payloadConverter;
+    private CachingPayloadCodec payloadCodec;
 
     @Autowired
     WorkflowClient temporalClient;
@@ -72,11 +72,8 @@ public class APIController {
         }
 
         List<Payload> incomingPayloadsList = incomingPayloads.build().getPayloadsList();
-        List<Payload> outgoingPayloadsList = incomingPayloadsList.
-                stream().
-                map(payloadConverter::extractPayload).
-                collect(Collectors.toList());
-//                codec.decode(incomingPayloadsList);
+
+        List<Payload> outgoingPayloadsList = payloadCodec.decode(incomingPayloadsList);
 
         PrintWriter writer = null;
         try {
