@@ -1,6 +1,8 @@
 package io.temporal.applied.patterns.cachingdataconverter.temporal;
 
 public class MarkEvictableRequest {
+    private  String runId;
+
     public String getNamespace() {
         return namespace;
     }
@@ -13,10 +15,11 @@ public class MarkEvictableRequest {
     private String workflowId;
     private String workflowType;
 
-    public MarkEvictableRequest(String namespace, String workflowType, String workflowId) {
+    public MarkEvictableRequest(String namespace, String workflowType, String workflowId, String runId) {
         this.namespace = namespace;
         this.workflowId = workflowId;
         this.workflowType = workflowType;
+        this.runId = runId;
     }
 
     public MarkEvictableRequest() {
@@ -36,5 +39,13 @@ public class MarkEvictableRequest {
 
     public void setWorkflowType(String workflowType) {
         this.workflowType = workflowType;
+    }
+
+    public String getRunId() {
+        return runId;
+    }
+
+    public void setRunId(String runId) {
+        this.runId = runId;
     }
 }

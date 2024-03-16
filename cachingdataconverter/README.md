@@ -34,6 +34,12 @@ This [RedisCacheCleanerImpl](src/main/java/io/temporal/applied/patterns/cachingd
 used to mark a workflow "evictable" by a [CacheWorkflowInboundCallsInterceptor](src/main/java/io/temporal/applied/patterns/cachingdataconverter/temporal/CacheWorkflowInboundCallsInterceptor.java)
 after the workflow has "Completed" or "Canceled".
 
+
+**CAUTION**:
+_This was attempted in the implementation found in this repo but ultimately you cannot reliably get the `RunId` for a workflow which makes marking a history log as evictable difficult._
+Currently this implementation invocation is disabled in the repo but is left for demonstration of
+_where_ such a "hook" might be used.
+
 #### Converter Server
 
 Returning a simple cache key for the payload is great for hiding data, but what if I want to debug the actual
@@ -89,4 +95,9 @@ Here you'll see payloads look something like:
         },
 ```
 
+
+## Garbage Collection Issues
+1. Query input is not in history
+2. Activities can time out as well
+3. 
 

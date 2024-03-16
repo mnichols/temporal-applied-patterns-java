@@ -19,6 +19,7 @@ public class CacheWorkflowInboundCallsInterceptor extends WorkflowInboundCallsIn
 
     @Override
     public WorkflowOutput execute(WorkflowInput input) {
+
         try {
             return super.execute(input);
         } finally {
@@ -30,7 +31,8 @@ public class CacheWorkflowInboundCallsInterceptor extends WorkflowInboundCallsIn
                             LocalActivityOptions.newBuilder().
                                     setStartToCloseTimeout(Duration.ofSeconds(2)).
                                     build());
-                    cleaner.markEvictable(new MarkEvictableRequest(info.getNamespace(), info.getWorkflowType(), info.getWorkflowId()));
+                    // NOTE: This has been disabled due to irregularity of detecting the correct RunId at this stage of execution
+                    //cleaner.markEvictable(new MarkEvictableRequest(info.getNamespace(), info.getWorkflowType(), info.getWorkflowId(),info.getRunId()));
                 });
                 scope.run();
 

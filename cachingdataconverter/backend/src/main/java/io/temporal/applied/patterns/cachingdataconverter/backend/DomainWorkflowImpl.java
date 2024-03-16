@@ -24,6 +24,7 @@ public class DomainWorkflowImpl implements DomainWorkflow {
 
     @Override
     public void execute(StartDomainWorkflowRequest params) {
+
         log.info("params received {}-{}", params.prefix, params.value);
         DomainWorkflowState state = new DomainWorkflowState();
 
@@ -45,5 +46,6 @@ public class DomainWorkflowImpl implements DomainWorkflow {
         if(!replyPromises.isEmpty()) {
             Promise.allOf(replyPromises).get();
         }
+
     }
 }

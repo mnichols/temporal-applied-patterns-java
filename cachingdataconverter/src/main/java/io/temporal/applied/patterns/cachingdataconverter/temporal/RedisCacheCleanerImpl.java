@@ -25,9 +25,9 @@ public class RedisCacheCleanerImpl implements CacheCleaner
     public void markEvictable(MarkEvictableRequest req) {
         logger.info("marking evictable: {}/{}/{}", req.getNamespace(), req.getWorkflowType(), req.getWorkflowId());
         try {
-            Boolean expire = template.expire(req.getWorkflowId(), RETENTION_POLICY_DURATION);
-            logger.info("SET TTL on {}: {}", req.getWorkflowId(), expire);
-            logger.info("to verify, please use `echo TTL {} | redis-cli`", req.getWorkflowId());
+            Boolean expire = template.expire(req.getRunId(), RETENTION_POLICY_DURATION);
+            logger.info("SET TTL on {}: {}", req.getRunId(), expire);
+            logger.info("to verify, please use `echo TTL {} | redis-cli`", req.getRunId());
         } catch (Exception e) {
             logger.error("failed to delete records for", e);
             throw e;

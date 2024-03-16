@@ -35,6 +35,8 @@ public class RedisCachingPayloadCodecImpl implements CachingPayloadCodec {
 
     static final String METADATA_CACHE_KEY_ID_KEY = "cache-key";
     static final String METADATA_WORKFLOW_ID_KEY = "workflow-id";
+
+    static final String METADATA_RUN_ID_KEY = "run-id";
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     public RedisCachingPayloadCodecImpl(RedisTemplate<String, CacheablePayload> template, PayloadConverter inner) {
@@ -60,7 +62,6 @@ public class RedisCachingPayloadCodecImpl implements CachingPayloadCodec {
     public List<Payload> decode(@Nonnull List<Payload> payloads) {
         return payloads.stream().map(this::retrieveActualPayload).collect(Collectors.toList());
     }
-
 
     private Payload retrieveActualPayload(Payload source) {
         if (!METADATA_ENCODING.equals(source.getMetadataOrDefault(EncodingKeys.METADATA_ENCODING_KEY, null))) {
@@ -140,7 +141,9 @@ public class RedisCachingPayloadCodecImpl implements CachingPayloadCodec {
     public PayloadCodec withContext(@Nonnull SerializationContext context) {
         if(context instanceof HasWorkflowSerializationContext) {
             HasWorkflowSerializationContext wfContext = ((HasWorkflowSerializationContext) context);
-            return new RedisCachingPayloadCodecImpl(inner, template, new CacheContextInfo(wfContext.getNamespace(), wfContext.getWorkflowId()));
+            return new RedisCachingPayloadCodecImpl(inner,
+                    template,
+                    new CacheContextInfo(wfContext.getNamespace(), wfContext.getWorkflowId()));
         }
 
         return CachingPayloadCodec.super.withContext(context);

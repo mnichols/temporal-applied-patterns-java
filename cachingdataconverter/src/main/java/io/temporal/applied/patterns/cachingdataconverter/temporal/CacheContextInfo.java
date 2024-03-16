@@ -7,7 +7,7 @@ public class CacheContextInfo {
     public CacheContextInfo() {
     }
 
-    public CacheContextInfo(String namespace,  String workflowId) {
+    public CacheContextInfo(String namespace, String workflowId) {
         this.namespace = namespace;
         this.workflowId = workflowId;
     }
@@ -27,4 +27,5 @@ public class CacheContextInfo {
     public void setWorkflowId(String workflowId) {
         this.workflowId = workflowId;
     }
+
 }
